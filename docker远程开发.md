@@ -69,6 +69,7 @@ CMD ["/usr/sbin/sshd", "-D"]
    这将创建一个名为`my_ubuntu_container`的新容器，并进入到该容器的bash终端。
 
 2. **配置SSH服务器**：在容器内部安装和配置SSH服务器：
+   
    ```bash
    apt update
    apt install -y openssh-server
@@ -77,7 +78,7 @@ CMD ["/usr/sbin/sshd", "-D"]
    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
    systemctl restart ssh
    ```
-
+   
 3. **映射SSH端口**：退出容器并重新以映射SSH端口的方式运行容器：
 
    ```bash
@@ -195,7 +196,26 @@ docker pull username/repository:tagname
 - 使用 `docker tag` 命令将本地镜像打标签。
 - 执行 `docker push` 将标记后的镜像推送到 Docker Hub。
 - 执行 `docker pull` 可以从 Docker Hub 拉取镜像到本地。
-- 
+
+# Docker命令操作
+
+## docker run的命令行说明
+
+```dockerfile
+docker run --name yolov9 --gpus all -it -v /home/mems/xzj/yolov9/datasets/:/coco/ -v /home/mems/xzj/yolov9/yolov9/:/yolov9 --shm-size=64g nvcr.io/nvidia/pytorch:21.11-py3
+```
+
+|                   参数                    |                             说明                             |
+| :---------------------------------------: | :----------------------------------------------------------: |
+|               --name yolov9               |                   指定容器的名称为 yolov9                    |
+|                --gpus all                 |              允许 Docker 容器访问所有可用的 GPU              |
+|                  -it/-d                   | -it：这个选项组合使得容器以交互模式运行，并分配一个伪终端；-d：以后台模式运行容器 |
+| -v /home/mems/xzj/yolov9/datasets/:/coco/ | 将宿主机的 /home/mems/xzj/yolov9/datasets/ 目录挂载到容器的 /coco/ 目录 |
+| -v /home/mems/xzj/yolov9/yolov9/:/yolov9  | 将宿主机的 /home/mems/xzj/yolov9/yolov9/ 目录挂载到容器的 /yolov9 目录 |
+|              --shm-size=64g               | 设置容器的共享内存大小为 64 GB，这对大规模数据处理或深度学习模型训练是有帮助的 |
+|     nvcr.io/nvidia/pytorch:21.11-py3      |                    指定使用的 Docker 镜像                    |
+
+
 
 # 常见问题及解决方法
 
@@ -234,4 +254,18 @@ docker pull username/repository:tagname
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 ```
+
+### 问题5: ssh 两个ip端口冲突，导致没办法连接
+
+无法重新远程连接，有可能Add correct host key in /root/.ssh/known_hosts to get rid of this message
+
+**解决方法**：
+
+进入到文件夹`C:\Users\Xiudi\.ssh`进去将冲突的IP进行删除即可
+
+
+
+# Docker知识点
+
+## Docker与nvidia-docker的区别
 
