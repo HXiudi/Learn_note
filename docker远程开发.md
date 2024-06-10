@@ -265,7 +265,68 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 
 
 
-# Docker知识点
+# Docker内网穿透
 
-## Docker与nvidia-docker的区别
+### 中国镜像
+
+#### Linux 系统下
+1. 下载并安装 cpolar:
+   ```bash
+   curl -L https://www.cpolar.com/static/downloads/install-release-cpolar.sh | sudo bash
+   ```
+
+2. Docker 操作：
+   - 搜索 Docker 镜像:
+     ```bash
+     docker search cpolar
+     ```
+   - 下载 Docker 镜像:
+     ```bash
+     docker pull probezy/cpolar
+     ```
+   - 查看 Docker 镜像:
+     ```bash
+     docker image
+     ```
+   - 运行 cpolar 服务:
+     ```bash
+     docker run -id --network host --name cpolar probezy/cpolar
+     ```
+   - 进入 Docker 容器的 Bash 环境:
+     ```bash
+     docker exec -it cpolar /bin/bash
+     ```
+
+3. 设置 cpolar 授权 token（替换 `[您的token]` 为您的实际 token）:
+   ```bash
+   cpolar authtoken [您的token]
+   ```
+
+4. 启动 cpolar 服务监听 8081 端口:
+   ```bash
+   cpolar http 8081
+   ```
+
+#### 访问 Web 界面
+- 直接访问：
+  - `http://本机ip:9200`
+  - `http://127.0.0.1:9200`
+
+#### 高级TCP（通过 Http://127.0.0.1:9200进行访问）
+- 高级 TCP 设置：
+  - 类型：自定义
+  - 协议：TCP
+  - 本地地址：22 (假定是服务器的 SSH 端口)
+  - 域名类型：域名or固定
+  - 地区：China vip
+  - 开放端口列表
+  - 访问地址：`tcp://6.tcp.vip.cpolar.cn:10725`
+
+#### 远程连接（外网映射）
+- 通过 SSH 连接：
+  ```bash
+  ssh root@6.tcp.vip.cpolar.cn -p 10725
+  ```
+
+
 
